@@ -1,7 +1,13 @@
-// student-test-app/src/pages/Admin.js
 import { useEffect, useState } from "react";
 import { dbInstance } from "../firebase";
 import { collection, getDocs } from "firebase/firestore";
+
+// Savollar ro'yxati admin panelda ham kerak
+const questionsList = [
+  { id: 1, question: "What is 2 + 2?" },
+  { id: 2, question: "What is the capital of France?" },
+  { id: 3, question: "What color do you get by mixing red and blue?" }
+];
 
 export default function AdminPage() {
   const [results, setResults] = useState([]);
@@ -14,6 +20,11 @@ export default function AdminPage() {
 
     fetchResults();
   }, []);
+
+  const getQuestionText = (id) => {
+    const found = questionsList.find(q => q.id.toString() === id.toString());
+    return found ? found.question : `Question ${id}`;
+  };
 
   return (
     <div className="min-h-screen p-6 bg-gradient-to-r from-purple-500 to-green-500">
@@ -29,7 +40,10 @@ export default function AdminPage() {
               <div className="mt-2">
                 {res.answers ? (
                   Object.entries(res.answers).map(([qid, ans]) => (
-                    <p key={qid}><strong>Q{qid}:</strong> {ans}</p>
+                    <div key={qid} className="mb-1">
+                      <p><strong>{getQuestionText(qid)}</strong></p>
+                      <p>Answer: {ans}</p>
+                    </div>
                   ))
                 ) : (
                   <p className="text-red-500">No answers submitted.</p>

@@ -12,13 +12,11 @@ const firebaseConfig = {
   projectId: "student-test-app-b1bec",
   storageBucket: "student-test-app-b1bec.firebasestorage.app",
   messagingSenderId: "437172721445",
-  appId: "1:437172721445:web:5985f2719a2426c473accc"
+  appId: "1:437172721445:web:5985f2719a2426c473accc",
 };
 
-// Initialize Firebase
+
 const app = initializeApp(firebaseConfig);
-// export const auth = getAuth(app);
-// export const db = getFirestore(app);
 const authInstance = getAuth(app);
 const dbInstance = getFirestore(app);
 
