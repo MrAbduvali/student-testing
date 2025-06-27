@@ -1,58 +1,88 @@
+// AdminPanel.jsx
 import { useEffect, useState } from "react";
 import { dbInstance } from "../firebase";
 import { collection, getDocs } from "firebase/firestore";
+import { Link } from "react-router-dom";
 
-// Savollar ro'yxati admin panelda ham kerak
-const questionsList = [
-  { id: 1, question: "What is 2 + 2?" },
-  { id: 2, question: "What is the capital of France?" },
-  { id: 3, question: "What color do you get by mixing red and blue?" }
-];
-
-export default function AdminPage() {
-  const [results, setResults] = useState([]);
+export default function AdminPanel() {
+  const [testResults, setTestResults] = useState([]);
+  const [cssResults, setCssResults] = useState([]);
+  const [editorResults, setEditorResults] = useState([]);
+  const [currentTab, setCurrentTab] = useState("html");
 
   useEffect(() => {
-    const fetchResults = async () => {
-      const snapshot = await getDocs(collection(dbInstance, "testResults"));
-      setResults(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
-    };
-
-    fetchResults();
+    getDocs(collection(dbInstance, "htmlTestResults")).then(snapshot => {
+      setTestResults(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+    });
+    getDocs(collection(dbInstance, "cssTestResults")).then(snapshot => {
+      setCssResults(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+    });
+    getDocs(collection(dbInstance, "editorSubmissions")).then(snapshot => {
+      setEditorResults(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+    });
   }, []);
 
-  const getQuestionText = (id) => {
-    const found = questionsList.find(q => q.id.toString() === id.toString());
-    return found ? found.question : `Question ${id}`;
-  };
+  const renderTable = (data, type) => (
+    <table className="min-w-full text-left">
+      <thead>
+        <tr>
+          <th className="border px-4 py-2">#</th>
+          <th className="border px-4 py-2">User</th>
+          <th className="border px-4 py-2">Date</th>
+          <th className="border px-4 py-2">Score</th>
+        </tr>
+      </thead>
+      <tbody>
+        {data.map((res, i) => (
+          <tr key={res.id} className="hover:bg-gray-50">
+            <td className="border px-4 py-2">{i + 1}</td>
+            <td className="border px-4 py-2">
+              <Link to={`/${type}/${res.id}`} className="text-blue-600 underline">
+                {res.user}
+              </Link>
+            </td>
+            <td className="border px-4 py-2">
+              {new Date(res.timestamp?.toDate?.() || Date.now()).toLocaleString()}
+            </td>
+            <td className="border px-4 py-2">{res.score || "-"}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
 
   return (
-    <div className="min-h-screen p-6 bg-gradient-to-r from-purple-500 to-green-500">
-      <div className="bg-white p-8 rounded shadow-lg max-w-4xl mx-auto">
-        <h2 className="text-2xl font-bold mb-4">Admin Panel - Test Results</h2>
-        {results.length === 0 ? (
-          <p>No results submitted yet.</p>
-        ) : (
-          results.map((res) => (
-            <div key={res.id} className="border p-4 mb-4 rounded">
-              <p><strong>User:</strong> {res.user}</p>
-              <p><strong>Submitted:</strong> {res.timestamp?.toDate?.().toString?.() || ""}</p>
-              <div className="mt-2">
-                {res.answers ? (
-                  Object.entries(res.answers).map(([qid, ans]) => (
-                    <div key={qid} className="mb-1">
-                      <p><strong>{getQuestionText(qid)}</strong></p>
-                      <p>Answer: {ans}</p>
-                    </div>
-                  ))
-                ) : (
-                  <p className="text-red-500">No answers submitted.</p>
-                )}
-              </div>
-            </div>
-          ))
-        )}
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-100 p-6">
+      <div className="max-w-6xl mx-auto">
+        <h1 className="text-3xl font-bold mb-6">Admin Panel</h1>
+
+        <div className="flex space-x-4 mb-6">
+          <button
+            onClick={() => setCurrentTab("html")}
+            className={`px-4 py-2 rounded ${currentTab === "html" ? "bg-purple-600 text-white" : "bg-gray-200"}`}
+          >HTML Test</button>
+
+          <button
+            onClick={() => setCurrentTab("css")}
+            className={`px-4 py-2 rounded ${currentTab === "css" ? "bg-purple-600 text-white" : "bg-gray-200"}`}
+          >CSS Test</button>
+
+          <button
+            onClick={() => setCurrentTab("editor")}
+            className={`px-4 py-2 rounded ${currentTab === "editor" ? "bg-purple-600 text-white" : "bg-gray-200"}`}
+          >Editor Submissions</button>
+        </div>
+
+        <div className="bg-white rounded-xl shadow p-4">
+          {currentTab === "html" && renderTable(testResults, "details")}
+          {currentTab === "css" && renderTable(cssResults, "cssdetails")}
+          {currentTab === "editor" && renderTable(editorResults, "editordetails")}
+        </div>
       </div>
     </div>
   );
 }
+
+// Albatta /details/:id, /cssdetails/:id va /editordetails/:id sahifalari alohida ko'rinish uchun kerak.
+// Xohlasangiz ularni ham yozib beraman.
+

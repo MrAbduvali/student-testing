@@ -1,0 +1,42 @@
+import { useEffect, useState } from "react";
+import { dbInstance } from "../firebase";
+import { doc, getDoc } from "firebase/firestore";
+import { useParams, useNavigate } from "react-router-dom";
+
+export default function EditorDetails() {
+  const { id } = useParams();
+  const [result, setResult] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    getDoc(doc(dbInstance, "editorSubmissions", id)).then(snapshot => {
+      setResult(snapshot.data());
+    });
+  }, [id]);
+
+  if (!result) return <div className="p-6">Loading...</div>;
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 to-yellow-50 p-6">
+      <div className="max-w-3xl mx-auto bg-white rounded-xl shadow p-6">
+        <h2 className="text-2xl font-bold mb-4">Editor Submission</h2>
+        <p><strong>User:</strong> {result.user}</p>
+        <p><strong>Submitted:</strong> {new Date(result.timestamp?.toDate?.() || Date.now()).toLocaleString()}</p>
+        
+        <div className="mt-4">
+          <h3 className="font-medium mb-2">Submitted Code:</h3>
+          <pre className="bg-gray-100 p-4 rounded text-sm overflow-auto">
+            {result.code || "No code submitted."}
+          </pre>
+        </div>
+
+        <button
+          onClick={() => navigate(-1)}
+          className="mt-6 bg-pink-600 text-white px-4 py-2 rounded hover:bg-pink-700"
+        >
+          Back
+        </button>
+      </div>
+    </div>
+  );
+}

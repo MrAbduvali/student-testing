@@ -1,58 +1,40 @@
-import { authInstance } from "../firebase";
-import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 
-export default function DashboardPage() {
+export default function Dashboard() {
   const navigate = useNavigate();
-
-  const handleLogout = () => {
-    signOut(authInstance);
-    navigate("/");
-  };
+  
+  const testCards = [
+    { title: "HTML Test", color: "bg-blue-500", path: "/html" },
+    { title: "CSS Test", color: "bg-green-500", path: "/css" },
+    { title: "Code Editor", color: "bg-purple-500", path: "/editor" },
+    { title: "Admin Panel", color: "bg-gray-800", path: "/admin" }
+  ];
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen gap-4 bg-gradient-to-r from-green-400 to-blue-400">
-      <div className="bg-white p-8 rounded shadow-lg">
-        <h2 className="text-xl mb-4">Welcome, {authInstance.currentUser?.email}</h2>
-        <button className="bg-green-500 text-white px-4 py-2 rounded mb-2 w-full" onClick={() => navigate("/test")}>Start Test</button>
-        <button className="bg-red-500 text-white px-4 py-2 rounded w-full" onClick={handleLogout}>Logout</button>
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-100 p-6">
+      <div className="max-w-6xl mx-auto">
+        <h1 className="text-3xl font-bold text-gray-800 mb-8">Welcome to Your Dashboard</h1>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {testCards.map((card, index) => (
+            <div 
+              key={index}
+              onClick={() => navigate(card.path)}
+              className={`${card.color} text-white rounded-xl p-6 shadow-lg cursor-pointer transform hover:-translate-y-1 transition-all duration-300 hover:shadow-xl`}
+            >
+              <h2 className="text-xl font-semibold mb-2">{card.title}</h2>
+              <p className="opacity-90">Click to start</p>
+              <div className="mt-4 text-right">
+                <span className="inline-block bg-white bg-opacity-20 rounded-full p-2">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
 }
-
-
-// import { authInstance } from "../firebase";
-// import { signOut } from "firebase/auth";
-// import { useNavigate } from "react-router-dom";
-
-// export default function DashboardPage() {
-//   const navigate = useNavigate();
-
-//   const handleLogout = () => {
-//     signOut(authInstance);
-//     navigate("/");
-//   };
-
-//   return (
-//     <div className="flex flex-col items-center justify-center h-screen gap-4 bg-gradient-to-r from-green-400 to-blue-400">
-//       <div className="bg-white p-8 rounded shadow-lg">
-//         <h2 className="text-xl mb-4">
-//           Welcome, {authInstance.currentUser?.email}
-//         </h2>
-//         <button
-//           className="bg-green-500 text-white px-4 py-2 rounded mb-2 w-full"
-//           onClick={() => navigate("/test")}
-//         >
-//           Start Test
-//         </button>
-//         <button
-//           className="bg-red-500 text-white px-4 py-2 rounded w-full"
-//           onClick={handleLogout}
-//         >
-//           Logout
-//         </button>
-//       </div>
-//     </div>
-//   );
-// }
