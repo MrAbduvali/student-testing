@@ -7,7 +7,7 @@ export default function Dashboard() {
     { title: "HTML Test", color: "bg-blue-500", path: "/html" },
     { title: "CSS Test", color: "bg-green-500", path: "/css" },
     { title: "Code Editor", color: "bg-purple-500", path: "/editor" },
-    { title: "Admin Panel", color: "bg-gray-800", path: "/admin" }
+    // { title: "Admin Panel", color: "bg-gray-800", path: "/admin" }
   ];
 
   return (
