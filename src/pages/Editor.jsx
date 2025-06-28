@@ -2,7 +2,11 @@ import { useState, useEffect } from "react";
 import { dbInstance, authInstance } from "../firebase";
 import { collection, addDoc, getDocs, query, where } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
-
+import first1 from '../assets/Screenshot 2025-06-28 at 10.06.10.png'
+import first2 from '../assets/Screenshot 2025-06-28 at 10.06.24.png'
+import first3 from '../assets/Screenshot 2025-06-28 at 10.06.27.png'
+import first4 from '../assets/Screenshot 2025-06-28 at 10.09.59.png'
+import first5 from '../assets/Screenshot 2025-06-28 at 10.12.30.png'
 export default function EditorSubmit() {
   const [htmlCode, setHtmlCode] = useState("");
   const [cssCode, setCssCode] = useState("");
@@ -25,36 +29,31 @@ export default function EditorSubmit() {
       id: 1,
       title: "Task 1: Create a Header",
       description: "Build a responsive header with navigation",
-      image:
-        "https://drive.google.com/file/d/1Cf5-qTIGwGhuP7U-SxZEuJopsLEGxOYT/preview",
+      image: first1,
     },
     {
       id: 2,
       title: "Task 2: Style Buttons",
       description: "Create styled buttons with hover effects",
-      image:
-        "https://drive.google.com/file/d/12zyjhNiHYiL1TSnPTcKeeNnOxL7U9mww/preview",
+      image: first2,
     },
     {
       id: 3,
       title: "Task 3: Build a Card",
       description: "Design a product card with image and details",
-      image:
-        "https://drive.google.com/file/d/1KKzABX-lLcTpgYuygK-NSsXKxLOfLv4V/preview",
+      image: first3,
     },
     {
       id: 4,
       title: "Task 4: Create a Form",
       description: "Implement a contact form with validation",
-      image:
-        "https://drive.google.com/file/d/1VT8sk2TbS2XHZ7OuIkK_zFpPFV8bo1Wb/preview",
+      image: first4,
     },
     {
       id: 5,
       title: "Task 5: Final Layout",
       description: "Combine all elements into a complete layout",
-      image:
-        "https://drive.google.com/file/d/1vBs18p6U3vouAwKCcuLUcZ9DyMMIrlWx/preview",
+      image: first5,
     },
   ];
 
@@ -196,13 +195,11 @@ export default function EditorSubmit() {
               {taskDescriptions[activeTask - 1].description}
             </p>
             <div className="bg-gray-100 p-4 rounded-lg">
-              <iframe
-                className="max-w-full h-auto rounded border border-gray-200"
+              <img
                 src={taskDescriptions[activeTask - 1].image}
-                width="640"
-                height="1580"
-                // allow="autoplay"
-              ></iframe>
+                alt={taskDescriptions[activeTask - 1].title}
+                className="max-w-full h-auto rounded border border-gray-200"
+              />
             </div>
           </div>
         </div>
