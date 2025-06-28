@@ -14,7 +14,7 @@ export default function EditorSubmit() {
     task2: { html: "", css: "" },
     task3: { html: "", css: "" },
     task4: { html: "", css: "" },
-    task5: { html: "", css: "" }
+    task5: { html: "", css: "" },
   });
   const navigate = useNavigate();
   const user = authInstance.currentUser?.email || "unknown";
@@ -25,37 +25,44 @@ export default function EditorSubmit() {
       id: 1,
       title: "Task 1: Create a Header",
       description: "Build a responsive header with navigation",
-      image: "/src/assets/Screenshot 2025-06-28 at 10.06.10.png"
+      image:
+        "https://drive.google.com/file/d/1Cf5-qTIGwGhuP7U-SxZEuJopsLEGxOYT/view?usp=sharing",
     },
     {
       id: 2,
       title: "Task 2: Style Buttons",
       description: "Create styled buttons with hover effects",
-      image: "/src/assets/Screenshot 2025-06-28 at 10.06.24.png"
+      image:
+        "https://drive.google.com/file/d/12zyjhNiHYiL1TSnPTcKeeNnOxL7U9mww/view?usp=sharing",
     },
     {
       id: 3,
       title: "Task 3: Build a Card",
       description: "Design a product card with image and details",
-      image: "/src/assets/Screenshot 2025-06-28 at 10.06.27.png"
+      image: "https://drive.google.com/file/d/1KKzABX-lLcTpgYuygK-NSsXKxLOfLv4V/view?usp=sharing",
     },
     {
       id: 4,
       title: "Task 4: Create a Form",
       description: "Implement a contact form with validation",
-      image: "/src/assets/Screenshot 2025-06-28 at 10.09.59.png"
+      image: "https://drive.google.com/file/d/1VT8sk2TbS2XHZ7OuIkK_zFpPFV8bo1Wb/view?usp=sharing",
     },
     {
       id: 5,
       title: "Task 5: Final Layout",
       description: "Combine all elements into a complete layout",
-      image: "/src/assets/Screenshot 2025-06-28 at 10.12.30.png"
-    }
+      image: "https://drive.google.com/file/d/1vBs18p6U3vouAwKCcuLUcZ9DyMMIrlWx/view?usp=sharing",
+    },
   ];
 
   useEffect(() => {
     const check = async () => {
-      const qSnap = await getDocs(query(collection(dbInstance, "editorSubmissions"), where("user", "==", user)));
+      const qSnap = await getDocs(
+        query(
+          collection(dbInstance, "editorSubmissions"),
+          where("user", "==", user)
+        )
+      );
       if (!qSnap.empty) setSubmitted(true);
     };
     check();
@@ -69,9 +76,9 @@ export default function EditorSubmit() {
 
   const handleTaskChange = (taskNumber) => {
     // Save current code before switching tasks
-    setTasks(prev => ({
+    setTasks((prev) => ({
       ...prev,
-      [`task${activeTask}`]: { html: htmlCode, css: cssCode }
+      [`task${activeTask}`]: { html: htmlCode, css: cssCode },
     }));
     setActiveTask(taskNumber);
   };
@@ -85,12 +92,15 @@ export default function EditorSubmit() {
         user,
         tasks: {
           ...tasks,
-          [`task${activeTask}`]: { html: htmlCode, css: cssCode } // Save current task
+          [`task${activeTask}`]: { html: htmlCode, css: cssCode }, // Save current task
         },
-        timestamp: new Date()
+        timestamp: new Date(),
       };
-      
-      await addDoc(collection(dbInstance, "editorSubmissions"), finalSubmission);
+
+      await addDoc(
+        collection(dbInstance, "editorSubmissions"),
+        finalSubmission
+      );
       navigate("/dashboard", { state: { editorCompleted: true } });
     } finally {
       setIsSubmitting(false);
@@ -112,13 +122,27 @@ export default function EditorSubmit() {
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-indigo-50">
         <div className="bg-white rounded-xl shadow-xl p-8 max-w-md w-full text-center">
           <div className="w-20 h-20 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <svg className="w-10 h-10 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            <svg
+              className="w-10 h-10 text-purple-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M5 13l4 4L19 7"
+              />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">Submission Complete!</h2>
-          <p className="text-gray-600 mb-6">Your code has been successfully submitted.</p>
-          <button 
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">
+            Submission Complete!
+          </h2>
+          <p className="text-gray-600 mb-6">
+            Your code has been successfully submitted.
+          </p>
+          <button
             onClick={() => navigate("/dashboard")}
             className="bg-purple-500 text-white px-6 py-2 rounded-lg hover:bg-purple-600 transition-colors"
           >
@@ -134,8 +158,12 @@ export default function EditorSubmit() {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">Code Editor Challenge</h1>
-          <p className="text-gray-600">Complete all 5 tasks to finish the challenge</p>
+          <h1 className="text-3xl font-bold text-gray-800 mb-2">
+            Code Editor Challenge
+          </h1>
+          <p className="text-gray-600">
+            Complete all 5 tasks to finish the challenge
+          </p>
         </div>
 
         {/* Task Navigation */}
@@ -165,8 +193,8 @@ export default function EditorSubmit() {
               {taskDescriptions[activeTask - 1].description}
             </p>
             <div className="bg-gray-100 p-4 rounded-lg">
-              <img 
-                src={taskDescriptions[activeTask - 1].image} 
+              <img
+                src={taskDescriptions[activeTask - 1].image}
                 alt={`Task ${activeTask} Example`}
                 className="max-w-full h-auto rounded border border-gray-200"
               />
@@ -192,9 +220,13 @@ export default function EditorSubmit() {
             <div className="h-full">
               <div className="flex items-center justify-between mb-3">
                 <h3 className="font-medium text-gray-700">
-                  <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded-md text-sm">HTML</span>
+                  <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded-md text-sm">
+                    HTML
+                  </span>
                 </h3>
-                <span className="text-xs text-gray-500">{htmlCode.length} characters</span>
+                <span className="text-xs text-gray-500">
+                  {htmlCode.length} characters
+                </span>
               </div>
               <textarea
                 value={htmlCode}
@@ -209,9 +241,13 @@ export default function EditorSubmit() {
             <div className="h-full">
               <div className="flex items-center justify-between mb-3">
                 <h3 className="font-medium text-gray-700">
-                  <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-md text-sm">CSS</span>
+                  <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-md text-sm">
+                    CSS
+                  </span>
                 </h3>
-                <span className="text-xs text-gray-500">{cssCode.length} characters</span>
+                <span className="text-xs text-gray-500">
+                  {cssCode.length} characters
+                </span>
               </div>
               <textarea
                 value={cssCode}
@@ -245,8 +281,8 @@ export default function EditorSubmit() {
             onClick={submit}
             disabled={isSubmitting}
             className={`px-8 py-3 rounded-lg font-medium shadow-md transition-all ${
-              isSubmitting 
-                ? "bg-purple-400 cursor-not-allowed" 
+              isSubmitting
+                ? "bg-purple-400 cursor-not-allowed"
                 : "bg-gradient-to-r from-purple-500 to-purple-600 text-white hover:from-purple-600 hover:to-purple-700 hover:shadow-lg"
             }`}
           >
@@ -255,7 +291,9 @@ export default function EditorSubmit() {
                 <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white inline-block mr-2"></div>
                 Submitting...
               </>
-            ) : "Submit All Tasks"}
+            ) : (
+              "Submit All Tasks"
+            )}
           </button>
         </div>
       </div>
