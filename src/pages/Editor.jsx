@@ -8,8 +8,50 @@ export default function EditorSubmit() {
   const [cssCode, setCssCode] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [activeTask, setActiveTask] = useState(1);
+  const [tasks, setTasks] = useState({
+    task1: { html: "", css: "" },
+    task2: { html: "", css: "" },
+    task3: { html: "", css: "" },
+    task4: { html: "", css: "" },
+    task5: { html: "", css: "" }
+  });
   const navigate = useNavigate();
   const user = authInstance.currentUser?.email || "unknown";
+
+  // Task descriptions with example images (replace with your actual image paths)
+  const taskDescriptions = [
+    {
+      id: 1,
+      title: "Task 1: Create a Header",
+      description: "Build a responsive header with navigation",
+      image: "/src/assets/Screenshot 2025-06-28 at 10.06.10.png"
+    },
+    {
+      id: 2,
+      title: "Task 2: Style Buttons",
+      description: "Create styled buttons with hover effects",
+      image: "/src/assets/Screenshot 2025-06-28 at 10.06.24.png"
+    },
+    {
+      id: 3,
+      title: "Task 3: Build a Card",
+      description: "Design a product card with image and details",
+      image: "/src/assets/Screenshot 2025-06-28 at 10.06.27.png"
+    },
+    {
+      id: 4,
+      title: "Task 4: Create a Form",
+      description: "Implement a contact form with validation",
+      image: "/src/assets/Screenshot 2025-06-28 at 10.09.59.png"
+    },
+    {
+      id: 5,
+      title: "Task 5: Final Layout",
+      description: "Combine all elements into a complete layout",
+      image: "/src/assets/Screenshot 2025-06-28 at 10.12.30.png"
+    }
+  ];
 
   useEffect(() => {
     const check = async () => {
@@ -19,16 +61,36 @@ export default function EditorSubmit() {
     check();
   }, [user]);
 
+  useEffect(() => {
+    // Update current code when task changes
+    setHtmlCode(tasks[`task${activeTask}`]?.html || "");
+    setCssCode(tasks[`task${activeTask}`]?.css || "");
+  }, [activeTask, tasks]);
+
+  const handleTaskChange = (taskNumber) => {
+    // Save current code before switching tasks
+    setTasks(prev => ({
+      ...prev,
+      [`task${activeTask}`]: { html: htmlCode, css: cssCode }
+    }));
+    setActiveTask(taskNumber);
+  };
+
   const submit = async () => {
     if (submitted) return;
     setIsSubmitting(true);
     try {
-      await addDoc(collection(dbInstance, "editorSubmissions"), { 
-        user, 
-        htmlCode, 
-        cssCode, 
-        timestamp: new Date() 
-      });
+      // Combine all tasks before submission
+      const finalSubmission = {
+        user,
+        tasks: {
+          ...tasks,
+          [`task${activeTask}`]: { html: htmlCode, css: cssCode } // Save current task
+        },
+        timestamp: new Date()
+      };
+      
+      await addDoc(collection(dbInstance, "editorSubmissions"), finalSubmission);
       navigate("/dashboard", { state: { editorCompleted: true } });
     } finally {
       setIsSubmitting(false);
@@ -73,7 +135,43 @@ export default function EditorSubmit() {
         {/* Header */}
         <div className="mb-8 text-center">
           <h1 className="text-3xl font-bold text-gray-800 mb-2">Code Editor Challenge</h1>
-          <p className="text-gray-600">Build the UI and submit your code</p>
+          <p className="text-gray-600">Complete all 5 tasks to finish the challenge</p>
+        </div>
+
+        {/* Task Navigation */}
+        <div className="flex justify-center gap-2 mb-8">
+          {[1, 2, 3, 4, 5].map((taskNum) => (
+            <button
+              key={taskNum}
+              onClick={() => handleTaskChange(taskNum)}
+              className={`px-4 py-2 rounded-md font-medium ${
+                activeTask === taskNum
+                  ? "bg-purple-600 text-white"
+                  : "bg-white text-purple-600 hover:bg-purple-50"
+              }`}
+            >
+              Task {taskNum}
+            </button>
+          ))}
+        </div>
+
+        {/* Task Description */}
+        <div className="bg-white rounded-xl shadow-md overflow-hidden mb-8">
+          <div className="p-6">
+            <h2 className="text-xl font-bold text-gray-800 mb-2">
+              {taskDescriptions[activeTask - 1].title}
+            </h2>
+            <p className="text-gray-600 mb-4">
+              {taskDescriptions[activeTask - 1].description}
+            </p>
+            <div className="bg-gray-100 p-4 rounded-lg">
+              <img 
+                src={taskDescriptions[activeTask - 1].image} 
+                alt={`Task ${activeTask} Example`}
+                className="max-w-full h-auto rounded border border-gray-200"
+              />
+            </div>
+          </div>
         </div>
 
         {/* Editor Layout */}
@@ -145,13 +243,11 @@ export default function EditorSubmit() {
         <div className="mt-8 text-center">
           <button
             onClick={submit}
-            disabled={isSubmitting || (!htmlCode && !cssCode)}
+            disabled={isSubmitting}
             className={`px-8 py-3 rounded-lg font-medium shadow-md transition-all ${
               isSubmitting 
                 ? "bg-purple-400 cursor-not-allowed" 
-                : (!htmlCode && !cssCode)
-                  ? "bg-gray-300 text-gray-500 cursor-not-allowed" 
-                  : "bg-gradient-to-r from-purple-500 to-purple-600 text-white hover:from-purple-600 hover:to-purple-700 hover:shadow-lg"
+                : "bg-gradient-to-r from-purple-500 to-purple-600 text-white hover:from-purple-600 hover:to-purple-700 hover:shadow-lg"
             }`}
           >
             {isSubmitting ? (
@@ -159,7 +255,7 @@ export default function EditorSubmit() {
                 <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white inline-block mr-2"></div>
                 Submitting...
               </>
-            ) : "Submit Code"}
+            ) : "Submit All Tasks"}
           </button>
         </div>
       </div>
