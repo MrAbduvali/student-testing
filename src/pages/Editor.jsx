@@ -26,32 +26,35 @@ export default function EditorSubmit() {
       title: "Task 1: Create a Header",
       description: "Build a responsive header with navigation",
       image:
-        "https://drive.google.com/file/d/1Cf5-qTIGwGhuP7U-SxZEuJopsLEGxOYT/view?usp=sharing",
+        "https://drive.google.com/file/d/1Cf5-qTIGwGhuP7U-SxZEuJopsLEGxOYT/preview",
     },
     {
       id: 2,
       title: "Task 2: Style Buttons",
       description: "Create styled buttons with hover effects",
       image:
-        "https://drive.google.com/file/d/12zyjhNiHYiL1TSnPTcKeeNnOxL7U9mww/view?usp=sharing",
+        "https://drive.google.com/file/d/12zyjhNiHYiL1TSnPTcKeeNnOxL7U9mww/preview",
     },
     {
       id: 3,
       title: "Task 3: Build a Card",
       description: "Design a product card with image and details",
-      image: "https://drive.google.com/file/d/1KKzABX-lLcTpgYuygK-NSsXKxLOfLv4V/view?usp=sharing",
+      image:
+        "https://drive.google.com/file/d/1KKzABX-lLcTpgYuygK-NSsXKxLOfLv4V/preview",
     },
     {
       id: 4,
       title: "Task 4: Create a Form",
       description: "Implement a contact form with validation",
-      image: "https://drive.google.com/file/d/1VT8sk2TbS2XHZ7OuIkK_zFpPFV8bo1Wb/view?usp=sharing",
+      image:
+        "https://drive.google.com/file/d/1VT8sk2TbS2XHZ7OuIkK_zFpPFV8bo1Wb/preview",
     },
     {
       id: 5,
       title: "Task 5: Final Layout",
       description: "Combine all elements into a complete layout",
-      image: "https://drive.google.com/file/d/1vBs18p6U3vouAwKCcuLUcZ9DyMMIrlWx/view?usp=sharing",
+      image:
+        "https://drive.google.com/file/d/1vBs18p6U3vouAwKCcuLUcZ9DyMMIrlWx/preview",
     },
   ];
 
@@ -193,11 +196,13 @@ export default function EditorSubmit() {
               {taskDescriptions[activeTask - 1].description}
             </p>
             <div className="bg-gray-100 p-4 rounded-lg">
-              <img
-                src={taskDescriptions[activeTask - 1].image}
-                alt={`Task ${activeTask} Example`}
+              <iframe
                 className="max-w-full h-auto rounded border border-gray-200"
-              />
+                src={taskDescriptions[activeTask - 1].image}
+                width="640"
+                height="1580"
+                // allow="autoplay"
+              ></iframe>
             </div>
           </div>
         </div>
