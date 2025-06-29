@@ -2,10 +2,10 @@ import { useState, useEffect } from "react";
 import { dbInstance, authInstance } from "../firebase";
 import { collection, addDoc, getDocs, query, where } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
-import first1 from "../assets/Screenshot 2025-06-28 at 10.06.24.png";
-import first2 from "../assets/Screenshot 2025-06-28 at 10.06.27.png";
-import first3 from "../assets/Screenshot 2025-06-28 at 10.12.30.png";
-export default function EditorSubmit() {
+import first1 from "../assets/Screenshot 2025-06-29 at 22.48.23.png";
+import first2 from "../assets/Screenshot 2025-06-29 at 22.58.06.png";
+import first3 from "../assets/Screenshot 2025-06-29 at 23.02.37.png";
+export default function CssEditorSubmit() {
   const [htmlCode, setHtmlCode] = useState("");
   const [cssCode, setCssCode] = useState("");
   const [submitted, setSubmitted] = useState(false);
@@ -45,7 +45,7 @@ export default function EditorSubmit() {
     const check = async () => {
       const qSnap = await getDocs(
         query(
-          collection(dbInstance, "editorSubmissions"),
+          collection(dbInstance, "cssEditorSubmissions"),
           where("user", "==", user)
         )
       );
@@ -84,7 +84,7 @@ export default function EditorSubmit() {
       };
 
       await addDoc(
-        collection(dbInstance, "editorSubmissions"),
+        collection(dbInstance, "cssEditorSubmissions"),
         finalSubmission
       );
       navigate("/dashboard", { state: { editorCompleted: true } });
@@ -176,7 +176,7 @@ export default function EditorSubmit() {
               {taskDescriptions[activeTask - 1].title}
             </h2>
             <p className="text-gray-600 mb-4">
-              {taskDescriptions[activeTask - 1].description}
+              https://i.pinimg.com/736x/48/47/d7/4847d769a20c15ab4755a7cb89a25bbd.jpg
             </p>
             <div className="bg-gray-100 p-4 rounded-lg">
               <img
@@ -241,7 +241,6 @@ export default function EditorSubmit() {
                 placeholder="body { ... }"
                 className="w-full h-64 font-mono text-sm p-4 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                 spellCheck="false"
-                disabled
               />
             </div>
           </div>

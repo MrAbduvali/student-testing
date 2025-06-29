@@ -6,8 +6,8 @@ export default function Dashboard() {
   const testCards = [
     { title: "HTML Test", color: "bg-blue-500", path: "/html" },
     { title: "CSS Test", color: "bg-green-500", path: "/css" },
-    { title: "Code Editor", color: "bg-purple-500", path: "/editor" },
-    // { title: "Admin Panel", color: "bg-gray-800", path: "/admin" }
+    { title: "Html Code Editor", color: "bg-purple-500", path: "/htmleditor" },
+    { title: "Css Code Editor", color: "bg-purple-500", path: "/csseditor" }
   ];
 
   return (

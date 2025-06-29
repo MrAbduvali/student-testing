@@ -4,7 +4,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { useParams, useNavigate } from "react-router-dom";
 import { ChevronLeftIcon } from "@heroicons/react/24/outline";
 
-export default function EditorDetails() {
+export default function CssEditorDetails() {
   const { id } = useParams();
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -15,7 +15,7 @@ export default function EditorDetails() {
     const fetchResult = async () => {
       try {
         setLoading(true);
-        const docRef = doc(dbInstance, "editorSubmissions", id);
+        const docRef = doc(dbInstance, "cssEditorSubmissions", id);
         const snapshot = await getDoc(docRef);
         
         if (!snapshot.exists()) {

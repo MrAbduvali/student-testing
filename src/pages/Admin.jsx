@@ -2,11 +2,13 @@ import { useEffect, useState } from "react";
 import { dbInstance } from "../firebase";
 import { collection, getDocs } from "firebase/firestore";
 import { Link } from "react-router-dom";
+import StudentRatingList from "./StudentRatingList";
 
 export default function AdminPanel() {
   const [testResults, setTestResults] = useState([]);
   const [cssResults, setCssResults] = useState([]);
   const [editorResults, setEditorResults] = useState([]);
+  const [cssEditorResults, setCssEditorResults] = useState([]);
   const [currentTab, setCurrentTab] = useState("html");
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
@@ -15,15 +17,17 @@ export default function AdminPanel() {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        const [htmlSnap, cssSnap, editorSnap] = await Promise.all([
+        const [htmlSnap, cssSnap, editorSnap, cssEditorSnap] = await Promise.all([
           getDocs(collection(dbInstance, "htmlTestResults")),
           getDocs(collection(dbInstance, "cssTestResults")),
-          getDocs(collection(dbInstance, "editorSubmissions"))
+          getDocs(collection(dbInstance, "editorSubmissions")),
+          getDocs(collection(dbInstance, "cssEditorSubmissions")) // Ensure this matches your Firestore collection name exactly
         ]);
 
         setTestResults(htmlSnap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
         setCssResults(cssSnap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
         setEditorResults(editorSnap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+        setCssEditorResults(cssEditorSnap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -38,7 +42,7 @@ export default function AdminPanel() {
     return data.filter(item => 
       item.user?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.id?.toLowerCase().includes(searchTerm.toLowerCase())
-    ); // Added missing closing parenthesis here
+    );
   };
 
   const renderTable = (data, type) => {
@@ -122,6 +126,7 @@ export default function AdminPanel() {
       case "html": return testResults;
       case "css": return cssResults;
       case "editor": return editorResults;
+      case "cssEditor": return cssEditorResults;
       default: return [];
     }
   };
@@ -131,14 +136,15 @@ export default function AdminPanel() {
       case "html": return "details";
       case "css": return "cssdetails";
       case "editor": return "editordetails";
+      case "cssEditor": return "csseditordetails"; // Changed to lowercase for consistency
       default: return "";
     }
   };
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+      <div className="max-w-7xl mx-auto mb-[100px]">
+       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
             <p className="mt-2 text-gray-600">
@@ -193,6 +199,16 @@ export default function AdminPanel() {
                   {editorResults.length}
                 </span>
               </button>
+
+              <button
+                onClick={() => setCurrentTab("cssEditor")}
+                className={`px-6 py-4 text-sm font-medium ${currentTab === "cssEditor" ? "border-b-2 border-indigo-500 text-indigo-600" : "text-gray-500 hover:text-gray-700 hover:border-gray-300"}`}
+              >
+                Css Editor Submissions
+                <span className="ml-2 bg-indigo-100 text-indigo-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                  {cssEditorResults.length}
+                </span>
+              </button>
             </nav>
           </div>
         </div>
@@ -208,6 +224,7 @@ export default function AdminPanel() {
                 {currentTab === "html" && "HTML Test Results"}
                 {currentTab === "css" && "CSS Test Results"}
                 {currentTab === "editor" && "Editor Submissions"}
+                {currentTab === "cssEditor" && "Css Editor Submissions"}
               </h2>
               <div className="text-sm text-gray-500">
                 Showing {filteredResults(getCurrentData()).length} of {getCurrentData().length} entries
@@ -217,6 +234,7 @@ export default function AdminPanel() {
           </div>
         )}
       </div>
+      <StudentRatingList />
     </div>
   );
 }
