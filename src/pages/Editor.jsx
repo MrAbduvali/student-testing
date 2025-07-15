@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import { dbInstance, authInstance } from "../firebase";
 import { collection, addDoc, getDocs, query, where } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
-import first1 from "../assets/Screenshot 2025-06-28 at 10.06.24.png";
-import first2 from "../assets/Screenshot 2025-06-28 at 10.06.27.png";
-import first3 from "../assets/Screenshot 2025-06-28 at 10.12.30.png";
+import first1 from "../assets/bir1.png";
+import first2 from "../assets/bir2.png";
+import first3 from "../assets/bir3.png";
+import first4 from "../assets/bir4.png";
 export default function EditorSubmit() {
   const [htmlCode, setHtmlCode] = useState("");
   const [cssCode, setCssCode] = useState("");
@@ -15,6 +16,7 @@ export default function EditorSubmit() {
     task1: { html: "", css: "" },
     task2: { html: "", css: "" },
     task3: { html: "", css: "" },
+    task4: { html: "", css: "" },
   });
   const navigate = useNavigate();
   const user = authInstance.currentUser?.email || "unknown";
@@ -23,21 +25,27 @@ export default function EditorSubmit() {
   const taskDescriptions = [
     {
       id: 1,
-      title: "Task 1: Create a Header",
-      description: "Build a responsive header with navigation",
+      title: "Task 1",
+      description: "Vazifani qo'lingizdan kelgancha bajaring.",
       image: first1,
     },
     {
       id: 2,
-      title: "Task 2: Style Buttons",
-      description: "Create styled buttons with hover effects",
+      title: "Task 2",
+      description: "Vazifani qo'lingizdan kelgancha bajaring.",
       image: first2,
     },
     {
       id: 3,
-      title: "Task 3: Build a Card",
-      description: "Design a product card with image and details",
+      title: "Task 3",
+      description: "Vazifani qo'lingizdan kelgancha bajaring.",
       image: first3,
+    },
+    {
+      id: 4,
+      title: "Task 4",
+      description: "Vazifani qo'lingizdan kelgancha bajaring.",
+      image: first4,
     },
   ];
 
@@ -154,7 +162,7 @@ export default function EditorSubmit() {
 
         {/* Task Navigation */}
         <div className="flex justify-center gap-2 mb-8">
-          {[1, 2, 3].map((taskNum) => (
+          {[1, 2, 3,4].map((taskNum) => (
             <button
               key={taskNum}
               onClick={() => handleTaskChange(taskNum)}
