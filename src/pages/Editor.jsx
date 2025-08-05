@@ -184,7 +184,7 @@ export default function EditorSubmit() {
               {taskDescriptions[activeTask - 1].title}
             </h2>
             <p className="text-gray-600 mb-4">
-            https://i.pinimg.com/736x/48/47/d7/4847d769a20c15ab4755a7cb89a25bbd.jpg
+                https://i.pinimg.com/736x/48/47/d7/4847d769a20c15ab4755a7cb89a25bbd.jpg
             </p>
             <div className="bg-gray-100 p-4 rounded-lg">
               <img
