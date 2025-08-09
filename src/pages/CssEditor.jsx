@@ -88,6 +88,8 @@ export default function CssEditorSubmit() {
         finalSubmission
       );
       navigate("/dashboard", { state: { editorCompleted: true } });
+    }catch (err) {
+      console.error("Submit error:", err);
     } finally {
       setIsSubmitting(false);
     }
