@@ -77,7 +77,8 @@ export default function EditorSubmit() {
     setActiveTask(taskNumber);
   };
 
-  const submit = async () => {
+  const submit = async (e) => {
+    e.preventDefault();
     if (submitted) return;
     setIsSubmitting(true);
     try {
