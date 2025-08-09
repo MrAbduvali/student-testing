@@ -182,7 +182,7 @@ export default function CssEditorDetails() {
             <iframe
               title={`Task ${activeTask} Preview`}
               srcDoc={combinedCode}
-              sandbox="allow-same-origin"
+              sandbox="allow-same-origin allow-scripts"
               className="w-full h-96 border rounded-lg bg-white"
             />
           </div>
